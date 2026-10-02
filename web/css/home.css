@@ -1,0 +1,17 @@
+.navbar{
+    list-style-type: none;
+    margin: 0%;
+    padding: 0%;
+    width: 200px;
+    background-color: darkslategrey;
+}
+.navlink a{
+    display: block;
+    color: black;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+.navlink a:hover[{
+    background-color: grey;
+    color: white;
+}
