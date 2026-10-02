@@ -8,7 +8,8 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/home.css">
 
     <title>My Codespace Web Server</title>
 
@@ -16,30 +17,28 @@
 
 <body>
 
-    <nav>
-
-    <a href="index.html">Home</a> |
-
-    <a href="about.html">About</a> |
-
-    <a href="contact.html">Contact</a>
-
+    <nav class="navbar">
+        <ul class="navlinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
     </nav>
  
-    <h1>Welcome to My Web Server!</h1>
+    <div class="home-content">
+        <div class="home-text">
+            <h1>Welcome to My Web Server!</h1>
+            <h2>Student Information</h2>
+            <ul>
+                <li>Name: ALIHAKIM MANGODA DIMACALING</li>
+                <li>Student ID: 24-6379-303</li>
+                <li>Course: CIT17 - 3H</li>
+            </ul>
+        </div>
 
-    <h2>Student Information</h2>
+        <img src="img/portrait-image.png" alt="Self Portrait" class="portrait-image">
 
-    <ul>
-
-        <li>Name: ALIHAKIM MANGODA DIMACALING</li>
-
-        <li>Student ID: 24-6379-303</li>
-
-        <li>Course: CIT17 - 3H</li>
-
-    </ul>
-
+    </div>
 </body>
 
 </html>
