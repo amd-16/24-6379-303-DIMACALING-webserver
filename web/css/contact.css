@@ -1,15 +1,22 @@
 .contact-body{
     padding: 20px 20px;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
     max-width: 700px;
     margin: 100px auto;
     border: 3px solid black;
     border-radius: 20px;
 }
+.contact-body h1{
+    text-align: left;
+}
 .contact-text{
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
+}
+.contact-text ul{
+    padding-left: 0;
 }
