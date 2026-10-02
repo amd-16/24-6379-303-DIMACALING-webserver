@@ -1,17 +1,22 @@
-.navbar{
-    list-style-type: none;
-    margin: 0%;
-    padding: 0%;
-    width: 200px;
-    background-color: darkslategrey;
+.home-content{
+    padding: 20px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    max-width: 700px;
+    margin: 100px auto;
+    border: 3px solid black;
+    border-radius: 20px;
 }
-.navlink a{
-    display: block;
-    color: black;
-    padding: 8px 16px;
-    text-decoration: none;
+.home-text{
+    display: flex;
+    flex-direction: column;
 }
-.navlink a:hover[{
-    background-color: grey;
-    color: white;
+.portrait-image{
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid black;
 }
