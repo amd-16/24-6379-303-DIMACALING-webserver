@@ -156,3 +156,54 @@ MariaDB [school]> SELECT students.name, courses.course_name FROM enrollments JOI
 +----------------+-------------+
 2 rows in set (0.002 sec)
 
+MariaDB [school]> SELECT * FROM students;
++----+-----------------------------+--------+------------+
+| id | name                        | course | year_level |
++----+-----------------------------+--------+------------+
+|  1 | Juan Dela Cruz              | BSIT   |          2 |
+|  2 | Maria Santos                | BSCS   |          2 |
+|  4 | Alihakim Mangoda Dimacaling | BSIT   |          3 |
+|  8 | Andres Bonifacio            | BSIT   |          1 |
+|  9 | Juan Luna                   | BSCS   |          2 |
+| 10 | Jose Rizal                  | BSIT   |          3 |
+| 11 | Andres Marco                | BSIT   |          1 |
+| 12 | Juan Laluna                 | BSCS   |          2 |
+| 13 | Jose Marichan               | BSIT   |          3 |
++----+-----------------------------+--------+------------+
+9 rows in set (0.001 sec)
+
+MariaDB [school]> SELECT * FROM courses;
++-----------+-------------+-------------------------+-------+
+| course_id | course_name | description             | units |
++-----------+-------------+-------------------------+-------+
+|         1 | CC6         | Emerging Technology     |     3 |
+|         2 | CIT6        | Capstone Project 1      |     3 |
+|         3 | CIT17       | Web Information Systems |     3 |
+|         4 | CC16        | IT Techno               |     2 |
+|         5 | CC12        | Statistics              |     3 |
+|         6 | CC21        | Intro to ERP            |     3 |
+|         7 | CC9         | Algorithms              |     2 |
+|         8 | CC15        | Multimedia              |     3 |
+|         9 | CC22        | Systems                 |     3 |
++-----------+-------------+-------------------------+-------+
+9 rows in set (0.000 sec)
+
+MariaDB [school]> SELECT * FROM enrollments;
++---------------+------------+-----------+-----------------+
+| enrollment_id | student_id | course_id | enrollment_date |
++---------------+------------+-----------+-----------------+
+|             5 |          1 |         1 | 2026-10-07      |
+|             6 |          1 |         2 | 2026-10-07      |
+|             7 |          2 |         1 | 2026-10-07      |
+|             8 |          4 |         3 | 2026-10-07      |
+|             9 |          8 |         1 | 2026-10-07      |
+|            10 |          1 |         2 | 2026-10-07      |
+|            11 |          9 |         1 | 2026-10-07      |
+|            12 |         10 |         3 | 2026-10-07      |
+|            16 |         11 |         4 | 2026-10-07      |
+|            17 |         12 |         8 | 2026-10-07      |
+|            18 |         13 |         9 | 2026-10-07      |
++---------------+------------+-----------+-----------------+
+11 rows in set (0.000 sec)
+
+MariaDB [school]> NOTEE;
