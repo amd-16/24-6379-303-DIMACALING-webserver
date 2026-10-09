@@ -1,1 +1,0 @@
-MariaDB [school]> exit
