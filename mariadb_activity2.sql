@@ -1,209 +1,177 @@
-MariaDB [(none)]> USE school;
-Reading table information for completion of table and column names
-You can turn off this feature to get a quicker startup with -A
+USE school;
 
-Database changed
-MariaDB [school]> SHOW TABLES;
-+------------------+
-| Tables_in_school |
-+------------------+
-| courses          |
-| students         |
-+------------------+
-2 rows in set (0.000 sec)
+SHOW TABLES;
 
-MariaDB [school]> CREATE TABLE enrollments (
-    -> enrollment_id INT AUTO_INCREMENT PRIMARY KEY,
-    -> student_id INT,
-    -> course_id INT,
-    -> enrollment_date DATE);
-Query OK, 0 rows affected (0.009 sec)
+CREATE TABLE enrollments (
+    enrollment_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    course_id INT,
+    enrollment_date DATE
+);
 
-MariaDB [school]> DESCRIBE enrollments;
-+-----------------+---------+------+-----+---------+----------------+
-| Field           | Type    | Null | Key | Default | Extra          |
-+-----------------+---------+------+-----+---------+----------------+
-| enrollment_id   | int(11) | NO   | PRI | NULL    | auto_increment |
-| student_id      | int(11) | YES  |     | NULL    |                |
-| course_id       | int(11) | YES  |     | NULL    |                |
-| enrollment_date | date    | YES  |     | NULL    |                |
-+-----------------+---------+------+-----+---------+----------------+
-4 rows in set (0.001 sec)
+DESCRIBE enrollments;
 
-MariaDB [school]> ALTER TABLE enrollments
-    -> ADD CONSTRAINT fk_student
-    -> FOREIGN KEY (student_id)
-    -> REFERENCES courses(course_id);
-Query OK, 0 rows affected (0.021 sec)
-Records: 0  Duplicates: 0  Warnings: 0
+ALTER TABLE enrollments
+ADD CONSTRAINT fk_student
+FOREIGN KEY (student_id)
+REFERENCES students(id);
 
-MariaDB [school]> DESCRIBE enrollments;
-+-----------------+---------+------+-----+---------+----------------+
-| Field           | Type    | Null | Key | Default | Extra          |
-+-----------------+---------+------+-----+---------+----------------+
-| enrollment_id   | int(11) | NO   | PRI | NULL    | auto_increment |
-| student_id      | int(11) | YES  | MUL | NULL    |                |
-| course_id       | int(11) | YES  |     | NULL    |                |
-| enrollment_date | date    | YES  |     | NULL    |                |
-+-----------------+---------+------+-----+---------+----------------+
-4 rows in set (0.001 sec)
+ALTER TABLE enrollments
+ADD CONSTRAINT fk_course
+FOREIGN KEY (course_id)
+REFERENCES courses(course_id);
 
-MariaDB [school]> ALTER TABLE enrollments ADD CONSTRAINT fk_course FOREIGN KEY (course_id) REFERENCES courses(course_id);
-Query OK, 0 rows affected (0.018 sec)
-Records: 0  Duplicates: 0  Warnings: 0
+DESCRIBE enrollments;
 
-MariaDB [school]> ALTER TABLE enrollments ADD CONSTRAINT fk_student FOREIGN KEY (student_id) REFERENCES students(id);
-ERROR 1005 (HY000): Can't create table `school`.`enrollments` (errno: 121 "Duplicate key on write or update")
-MariaDB [school]> ALTER TABLE enrollments ADD CONSTRAINT fk_student FOREIGN KEY (student_id) REFERENCES students(student_id);
-ERROR 1005 (HY000): Can't create table `school`.`enrollments` (errno: 150 "Foreign key constraint is incorrectly formed")
-MariaDB [school]> ALTER TABLE enrollments ADD FOREIGN KEY (student_id) REFERENCES students(id);
-Query OK, 0 rows affected (0.017 sec)
-Records: 0  Duplicates: 0  Warnings: 0
+SELECT * FROM students;
 
-MariaDB [school]> DESCRIBE enrollments;
-+-----------------+---------+------+-----+---------+----------------+
-| Field           | Type    | Null | Key | Default | Extra          |
-+-----------------+---------+------+-----+---------+----------------+
-| enrollment_id   | int(11) | NO   | PRI | NULL    | auto_increment |
-| student_id      | int(11) | YES  | MUL | NULL    |                |
-| course_id       | int(11) | YES  | MUL | NULL    |                |
-| enrollment_date | date    | YES  |     | NULL    |                |
-+-----------------+---------+------+-----+---------+----------------+
-4 rows in set (0.002 sec)
+SELECT * FROM courses;
 
-MariaDB [school]> SELECT * FROM students;
-+----+-----------------------------+--------+------------+
-| id | name                        | course | year_level |
-+----+-----------------------------+--------+------------+
-|  1 | Juan Dela Cruz              | BSIT   |          2 |
-|  2 | Maria Santos                | BSCS   |          2 |
-|  4 | Alihakim Mangoda Dimacaling | BSIT   |          3 |
-+----+-----------------------------+--------+------------+
-3 rows in set (0.000 sec)
+INSERT INTO enrollments
+(student_id, course_id, enrollment_date)
+VALUES
+(1, 1, '2026-10-07'),
+(1, 2, '2026-10-07'),
+(2, 1, '2026-10-07'),
+(4, 3, '2026-10-07');
 
-MariaDB [school]> SELECT * FROM courses;
-+-----------+-------------+-------------------------+-------+
-| course_id | course_name | description             | units |
-+-----------+-------------+-------------------------+-------+
-|         1 | CC6         | Emerging Technology     |     3 |
-|         2 | CIT6        | Capstone Project 1      |     3 |
-|         3 | CIT17       | Web Information Systems |     3 |
-+-----------+-------------+-------------------------+-------+
-3 rows in set (0.000 sec)
+SELECT * FROM enrollments;
 
-MariaDB [school]> INSERT INTO enrollments
-    -> (student_id, course_id, enrollment_date)
-    -> VALUES
-    -> (1, 1, '2026-10-07'),
-    -> (1, 2, '2026-10-07'),
-    -> (2, 1, '2026-10-07'),
-    -> (4, 3, '2026-10-07');
-ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`school`.`enrollments`, CONSTRAINT `fk_student` FOREIGN KEY (`student_id`) REFERENCES `courses` (`course_id`))
-MariaDB [school]> ALTER TABLE enrollments DROP FOREIGN KEY fk_student;
-Query OK, 0 rows affected (0.011 sec)
-Records: 0  Duplicates: 0  Warnings: 0
+SELECT
+    students.name,
+    courses.course_name,
+    enrollments.enrollment_date
+FROM enrollments
+JOIN students
+    ON enrollments.student_id = students.id
+JOIN courses
+    ON enrollments.course_id = courses.course_id;
 
-MariaDB [school]> ALTER TABLE enrollments 
-    -> ADD CONSTRAINT fk_enrollments_student 
-    -> FOREIGN KEY (student_id) REFERENCES students(id);
-Query OK, 0 rows affected (0.019 sec)
-Records: 0  Duplicates: 0  Warnings: 0
+SELECT
+    students.name,
+    courses.course_name
+FROM enrollments
+JOIN students
+    ON enrollments.student_id = students.id
+JOIN courses
+    ON enrollments.course_id = courses.course_id
+WHERE courses.course_name = 'CC6';
 
-MariaDB [school]> ALTER TABLE enrollments 
-    -> ADD CONSTRAINT fk_enrollments_course 
-    -> FOREIGN KEY (course_id) REFERENCES courses(course_id);
-Query OK, 0 rows affected (0.017 sec)
-Records: 0  Duplicates: 0  Warnings: 0
+SELECT
+    students.name,
+    courses.course_name
+FROM enrollments
+JOIN students
+    ON enrollments.student_id = students.id
+JOIN courses
+    ON enrollments.course_id = courses.course_id
+ORDER BY students.name ASC;
 
-MariaDB [school]> INSERT INTO enrollments (student_id, course_id, enrollment_date) VALUES (1, 1, '2026-10-07'), (1, 2, '2026-10-07'), (2, 1, '2026-10-07'), (4, 3, '2026-10-07');
-Query OK, 4 rows affected (0.001 sec)
-Records: 4  Duplicates: 0  Warnings: 0
+SELECT
+    students.name,
+    courses.course_name
+FROM enrollments
+JOIN students
+    ON enrollments.student_id = students.id
+JOIN courses
+    ON enrollments.course_id = courses.course_id
+ORDER BY students.name DESC;
 
-MariaDB [school]> SELECT * FROM enrollments;
-+---------------+------------+-----------+-----------------+
-| enrollment_id | student_id | course_id | enrollment_date |
-+---------------+------------+-----------+-----------------+
-|             5 |          1 |         1 | 2026-10-07      |
-|             6 |          1 |         2 | 2026-10-07      |
-|             7 |          2 |         1 | 2026-10-07      |
-|             8 |          4 |         3 | 2026-10-07      |
-+---------------+------------+-----------+-----------------+
-4 rows in set (0.000 sec)
+SELECT COUNT(*) AS total_students
+FROM students;
 
-MariaDB [school]> SELECT students.name, courses.course_name, enrollments.enrollments_date
-    -> FROM enrollments
-    -> JOIN students
-    -> ON enrollments.student_id = students.id
-    -> JOIN courses ON enrollments.course_id = courses.course_id;
-ERROR 1054 (42S22): Unknown column 'enrollments.enrollments_date' in 'SELECT'
-MariaDB [school]> SELECT students.name, courses.course_name, enrollments.enrollment_date FROM enrollments JOIN students ON enrollments.student_id = students.id JOIN courses ON enrollments.course_id = courses.course_id;
-+-----------------------------+-------------+-----------------+
-| name                        | course_name | enrollment_date |
-+-----------------------------+-------------+-----------------+
-| Juan Dela Cruz              | CC6         | 2026-10-07      |
-| Juan Dela Cruz              | CIT6        | 2026-10-07      |
-| Maria Santos                | CC6         | 2026-10-07      |
-| Alihakim Mangoda Dimacaling | CIT17       | 2026-10-07      |
-+-----------------------------+-------------+-----------------+
-4 rows in set (0.001 sec)
+SELECT COUNT(*) AS total_enrollments
+FROM enrollments;
 
-MariaDB [school]> SELECT students.name, courses.course_name FROM enrollments JOIN students ON enrollments.student_id = students.id JOIN courses ON enrollments.course_id = courses.course_id WHERE courses.course_name = 'CC6';
-+----------------+-------------+
-| name           | course_name |
-+----------------+-------------+
-| Juan Dela Cruz | CC6         |
-| Maria Santos   | CC6         |
-+----------------+-------------+
-2 rows in set (0.002 sec)
+SELECT
+    courses.course_name,
+    COUNT(enrollments.student_id) AS number_of_students
+FROM courses
+LEFT JOIN enrollments
+    ON courses.course_id = enrollments.course_id
+GROUP BY courses.course_id, courses.course_name;
 
-MariaDB [school]> SELECT * FROM students;
-+----+-----------------------------+--------+------------+
-| id | name                        | course | year_level |
-+----+-----------------------------+--------+------------+
-|  1 | Juan Dela Cruz              | BSIT   |          2 |
-|  2 | Maria Santos                | BSCS   |          2 |
-|  4 | Alihakim Mangoda Dimacaling | BSIT   |          3 |
-|  8 | Andres Bonifacio            | BSIT   |          1 |
-|  9 | Juan Luna                   | BSCS   |          2 |
-| 10 | Jose Rizal                  | BSIT   |          3 |
-| 11 | Andres Marco                | BSIT   |          1 |
-| 12 | Juan Laluna                 | BSCS   |          2 |
-| 13 | Jose Marichan               | BSIT   |          3 |
-+----+-----------------------------+--------+------------+
-9 rows in set (0.001 sec)
+SELECT
+    courses.course_name,
+    COUNT(enrollments.student_id) AS number_of_students
+FROM courses
+LEFT JOIN enrollments
+    ON courses.course_id = enrollments.course_id
+GROUP BY courses.course_id, courses.course_name
+ORDER BY number_of_students DESC;
 
-MariaDB [school]> SELECT * FROM courses;
-+-----------+-------------+-------------------------+-------+
-| course_id | course_name | description             | units |
-+-----------+-------------+-------------------------+-------+
-|         1 | CC6         | Emerging Technology     |     3 |
-|         2 | CIT6        | Capstone Project 1      |     3 |
-|         3 | CIT17       | Web Information Systems |     3 |
-|         4 | CC16        | IT Techno               |     2 |
-|         5 | CC12        | Statistics              |     3 |
-|         6 | CC21        | Intro to ERP            |     3 |
-|         7 | CC9         | Algorithms              |     2 |
-|         8 | CC15        | Multimedia              |     3 |
-|         9 | CC22        | Systems                 |     3 |
-+-----------+-------------+-------------------------+-------+
-9 rows in set (0.000 sec)
+SELECT
+    students.id AS student_id,
+    students.name AS student_name,
+    courses.course_name,
+    enrollments.enrollment_date
+FROM enrollments
+JOIN students
+    ON enrollments.student_id = students.id
+JOIN courses
+    ON enrollments.course_id = courses.course_id
+ORDER BY students.name;
 
-MariaDB [school]> SELECT * FROM enrollments;
-+---------------+------------+-----------+-----------------+
-| enrollment_id | student_id | course_id | enrollment_date |
-+---------------+------------+-----------+-----------------+
-|             5 |          1 |         1 | 2026-10-07      |
-|             6 |          1 |         2 | 2026-10-07      |
-|             7 |          2 |         1 | 2026-10-07      |
-|             8 |          4 |         3 | 2026-10-07      |
-|             9 |          8 |         1 | 2026-10-07      |
-|            10 |          1 |         2 | 2026-10-07      |
-|            11 |          9 |         1 | 2026-10-07      |
-|            12 |         10 |         3 | 2026-10-07      |
-|            16 |         11 |         4 | 2026-10-07      |
-|            17 |         12 |         8 | 2026-10-07      |
-|            18 |         13 |         9 | 2026-10-07      |
-+---------------+------------+-----------+-----------------+
-11 rows in set (0.000 sec)
+INSERT INTO students (id, name, course, year_level) VALUES
+(8, 'Andres Bonifacio', 'BSIT', 1),
+(9, 'Juan Luna', 'BSCS', 2),
+(10, 'Jose Rizal', 'BSIT', 3),
+(11, 'Andres Marco', 'BSIT', 1),
+(12, 'Juan Laluna', 'BSCS', 2),
+(13, 'Jose Marichan', 'BSIT', 3);
 
-MariaDB [school]> NOTEE;
+INSERT INTO courses (course_id, course_name, description, units) VALUES
+(4, 'CC16', 'IT Techno', 2),
+(5, 'CC12', 'Statistics', 3),
+(6, 'CC21', 'Intro to ERP', 3),
+(7, 'CC9', 'Algorithms', 2),
+(8, 'CC15', 'Multimedia', 3),
+(9, 'CC22', 'Systems', 3);
+
+INSERT INTO enrollments
+(student_id, course_id, enrollment_date)
+VALUES
+(8, 1, '2026-10-07'),
+(1, 2, '2026-10-07'),
+(9, 1, '2026-10-07'),
+(10, 3, '2026-10-07'),
+(11, 4, '2026-10-07'),
+(12, 8, '2026-10-07'),
+(13, 9, '2026-10-07');
+
+SELECT * FROM students;
+
+SELECT * FROM courses;
+
+SELECT * FROM enrollments;
+
+SELECT students.id, students.name, courses.course_name
+FROM enrollments
+JOIN students ON enrollments.student_id = students.id
+JOIN courses ON enrollments.course_id = courses.course_id
+WHERE courses.course_name = 'CC6';
+
+SELECT students.name, courses.course_name, courses.description
+FROM enrollments
+JOIN students ON enrollments.student_id = students.id
+JOIN courses ON enrollments.course_id = courses.course_id
+WHERE students.name = 'Juan Dela Cruz';
+
+SELECT courses.course_name, COUNT(enrollments.student_id) AS number_of_students
+FROM courses
+LEFT JOIN enrollments ON courses.course_id = enrollments.course_id
+GROUP BY courses.course_id, courses.course_name;
+
+SELECT courses.course_name, COUNT(enrollments.student_id) AS number_of_students
+FROM courses
+LEFT JOIN enrollments ON courses.course_id = enrollments.course_id
+GROUP BY courses.course_id, courses.course_name
+ORDER BY number_of_students DESC
+LIMIT 1;
+
+SELECT id, name, course, year_level
+FROM students
+ORDER BY name ASC;
+
+SELECT COUNT(*) AS total_enrollments
+FROM enrollments;
